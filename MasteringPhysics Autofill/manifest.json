@@ -1,0 +1,20 @@
+{
+	"manifest_version": 2,
+	"name": "Website Autofill",
+	"description": "Autofills username and password",
+	"version": "1.0",
+	"content_scripts": [
+	{
+		"run_at": "document_end",
+		"matches": ["*://www.masteringphysics.com/site/login.html", "*://www.google.com/search?*"], 
+		"js": ["inject.js"]
+	}
+	],
+ 
+	"permissions": [
+		"storage"
+	],
+	"icons": {
+		"16":"write.png",
+		"128":"write.png"}
+}

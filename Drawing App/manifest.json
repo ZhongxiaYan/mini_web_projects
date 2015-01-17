@@ -1,0 +1,23 @@
+{
+	"manifest_version": 2,
+	"name": "Better than Paint",
+	"description": "Chrome drawing app",
+	"version": "1.0",
+	"content_scripts": [
+	{
+		"run_at": "document_end",
+		"matches": ["*://*/*"], 
+		"js": ["inject.js"]
+	}
+	],
+ 
+	"permissions": [
+		"storage"
+	],
+
+	"browser_action": {"default_icon": "palette.png", "default_popup": "canvas.html"},	
+
+	"icons": {
+		"16":"palette.png",
+		"128":"palette.png"}
+}

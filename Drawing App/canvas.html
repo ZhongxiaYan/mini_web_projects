@@ -1,0 +1,230 @@
+<html>
+	<head>
+		<script type="text/javascript" src="draw.js"></script>
+		<link rel="stylesheet" href="https://code.jquery.com/ui/1.11.2/themes/smoothness/jquery-ui.css">
+		<script type="text/javascript" src="jquery-2.1.1.min.js"></script>
+		<script type="text/javascript" src="jquery-ui.js"></script>
+    	<link rel="stylesheet" type="text/css" href="bootstrap.min.css">
+		<style type="text/css">
+			body {
+				height: 570px;
+				width: 670px;
+			}
+			canvas {
+				position: fixed;
+				left: 0px;
+				top: 0px;
+				border: 1px solid black;
+				cursor: crosshair;
+			}
+			#canvas {
+				z-index: 1;
+			}
+			#tempCanvas {
+				z-index: 2;
+			}
+			#bkgdCanvas {
+				z-index: 0;
+			}
+			#preview {
+				position: fixed;
+				left: 610px;
+				top: 365px;
+				border: 1px solid black;
+				cursor: default;
+			}
+			#toolLabel {
+				position: fixed;
+				left: 510px;
+				top: 60px;
+			}
+			#toolType {
+				position: fixed;
+				left: 20px;
+				top: 525px;
+			}
+			#colorLabel {
+				position: fixed;
+				left: 610px;
+				top: 60px;
+			}
+			#color {
+				position: fixed;
+				left: 610px;
+				top: 80px;
+			}
+			#widthLabel {
+				position: fixed;
+				left: 610px;
+				top: 110px;
+			}
+			#widthSlider {
+				position: fixed;
+				left: 630px;
+			    top: 130px;
+				height: 220px;
+			    width: 16px;
+			    cursor: default;		    
+			}
+			#bkgdLabel {
+				position: fixed;
+				left: 5px;
+				top: 505px;
+			}
+			#bkgd {
+				position: fixed;
+				left: 5px;
+				top: 525px;
+			}
+			#rows {
+				position: fixed;
+				left: 100px;
+				top: 515px;
+				width: 30px;
+			}
+			#columns {
+				position: fixed;
+				left: 100px;
+				top: 540px;
+				width: 30px;
+			}
+			#xAxis {
+				position: fixed;
+				left: 140px;
+				top: 515px;
+				width: 30px;
+			}
+			#yAxis{
+				position: fixed;
+				left: 140px;
+				top: 540px;
+				width: 30px;
+			}
+			#xAxisLabel {
+				position: fixed;
+				left: 485px;
+				top: 260px;
+				font-size: 20px;
+				font-style: italic;
+			}
+			#yAxisLabel {
+				position: fixed;
+				left: 300px;
+				top: 0px;
+				font-size: 20px;
+				font-style: italic;
+			}
+			#hint {
+				position: fixed;
+			}
+			#textBox {
+				position: fixed;
+				display: none;
+				background: transparent;
+				border: 0;
+				overflow: hidden;
+			}
+			#textBox:focus {
+				outline: 0;
+				border: 0;
+			}
+			#bkgdImage {
+				position: fixed;
+				z-index: 0;
+				left: 200;
+				top: 510;
+			}
+			#upload {
+				position: fixed;
+				left: 200;
+				top: 535;
+			}
+			#closeWindow {
+		        position: fixed;
+				left: 610px;
+				top: 0px;
+		        width: 60px;
+		        height: 33px;
+		        border-radius: 8px;
+		        background-color: #980000;
+			}
+			#closeWindow:hover {
+			    background: red;
+			}
+			#accessory {
+				position: fixed;
+				left: 390px;
+				top: 520px;
+				z-index: 1;
+			}
+		</style>
+	</head>
+	
+	<body>
+		<button id="closeWindow" type="button" class="btn btn-danger btn-fill">Close</button>
+		
+		<canvas id="canvas" width="500" height="500">
+			<p>Canvas is unsupported by your browser</p>
+		</canvas>
+
+		<canvas id="tempCanvas" width="500" height="500"></canvas>
+
+		<canvas id="bkgdCanvas" width="500" height="500"></canvas>
+
+		<canvas id="preview" width="50" height="40"></canvas>
+
+		<div class="btn-group-vertical" role="group" aria-label="..." id="toolLabel">
+			<button type="button" class="btn btn-default" value="pencil" style="background-color: yellow">Pencil</button>
+			<button type="button" class="btn btn-default" value="line">Line</button>
+			<button type="button" class="btn btn-default" value="dashedLine">Dashes</button>
+			<button type="button" class="btn btn-default" value="arrow">Arrow</button>
+			<button type="button" class="btn btn-default" value="rect">Rectangle</button>
+			<button type="button" class="btn btn-default" value="fill">Fill</button>
+			<button type="button" class="btn btn-default" value="arc">Arc</button>
+			<button type="button" class="btn btn-default" value="clearRect">Erase</button>
+		</div>
+
+		<label id="hint"></label>
+
+		<label id="colorLabel">Color:</label>
+			<input type="color" id="color"></input>
+		 
+		<label id="widthLabel">Width:</label>
+		<div id="widthSlider" class="slider"></div>
+
+		<label id="bkgdLabel">Background:</label>
+
+		<form>
+			<select id="bkgd">
+				<option type="text" value="none">None</option>
+				<option type="text" value="grid">Grid</option>
+				<option type="text" value="axis">Axis</option>
+				<option type="text" value="file">File</option>
+			</select
+		</form>
+
+		<form id="bkgdForm">
+			<input type="text" id="rows" placeholder="rows" disabled></input>
+			<input type="text" id="columns" placeholder="cols" disabled></input>
+			<input type="text" id="xAxis" placeholder="x-var" disabled></input>
+			<input type="text" id="yAxis" placeholder="y-var" disabled></input>
+		</form>
+
+		<label id="xAxisLabel"></label>
+		<label id="yAxisLabel"></label>
+
+		<input type="text" id="textBox">
+
+		<input type="file" id="bkgdImage" accept="image/*">
+		<input type="button" id="upload" value="Image Upload">
+
+		<div class="btn-group-justified" role="group" aria-label="..." id="accessory" >
+			<button type="button" class="btn btn-primary" id="clearCanvas" style="width: 95px">Clear Front</button>
+			<button type="button" class="btn btn-warning" id="clearBkgd" style="width: 95px">Clear Back</button>
+			<button type="button" class="btn btn-success" style="width: 84px" >
+				<a href="#" id="downloadButton" download="drawing" style="color: black">Download</a>
+			</button>
+		</div>
+		
+	</body>
+</html>

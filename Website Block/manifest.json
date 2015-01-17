@@ -1,0 +1,31 @@
+{
+ "manifest_version": 2,
+ "name": "Website Block",
+ "description": "Allow user to use a website for a certain amount of time, then blocks the user for a user-chosen duration",
+ "version": "1.0",
+ 
+ "background": {
+ 	"scripts":["background_script.js"]
+ 	//"page": "background.html"
+ },
+
+ "content_scripts": [
+ 	{
+ 		"run_at": "document_start",
+ 		"matches": ["*://*/*"], 
+ 		"js": ["inject.js"]
+ 	}
+ ],
+ 
+ "permissions": [
+ 	"tabs", 
+ 	"storage"
+ ],
+ 
+ "browser_action": {"default_icon": "block.png", "default_popup": "popup.html"},
+
+ "icons": {
+ 	"16":"block.png",
+ 	"128":"block.png"}
+}
+
