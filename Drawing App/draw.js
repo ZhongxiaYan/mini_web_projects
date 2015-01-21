@@ -253,11 +253,13 @@ function handleEdits() {
 					 'background': BKGDCONTEXT.getImageData(0, 0, BKGDCANVAS.width, BKGDCANVAS.height)
 	};
 	REDOSTORAGE.length = 0;
-	if (CURRENT && (CURRENT.editcount % 5 === 0 || CURRENT.editcount < 11)) {
-		undoLen = UNDOSTORAGE.unshift(CURRENT) // add new backup to beginning of UNDOSTORAGE, returns the new length
-	}
-	CURRENT = newBackup; // sets the current edit
-	if (undoLen > 10) {
+    if (EDITCOUNT % 5 !== 0 && EDITCOUNT > 12) { // Keeps an immediate backup of 12 edits
+        UNDOSTORAGE.splice(12, 1);
+    }
+    undoLen = UNDOSTORAGE.unshift(CURRENT) // add new backup to beginning of UNDOSTORAGE, returns the new length
+	
+    CURRENT = newBackup; // sets the current edit
+	if (undoLen > 20) {
 		UNDOSTORAGE.pop(); // remove elements from the end if too much storage
 	}
 	// backs up to chrome local storage
@@ -271,7 +273,7 @@ function undo() {
 	var last = UNDOSTORAGE.shift(); // removes most recent history from beginning of UNDOSTORAGE
 	if (last) { // checks if last is undefined
 	 	var redoLen = REDOSTORAGE.unshift(CURRENT); // add CURRENT to REDOSTORAGE
-		if (redoLen > 10) {
+		if (redoLen > 20) {
 			REDOSTORAGE.pop();
 		}
 		CURRENT = last; // replace CURRENT with previous history
@@ -286,7 +288,7 @@ function redo() {
 	var next = REDOSTORAGE.shift(); // removes most recently undone history from REDOSTORAGE
 	if (next) {
 		var undoLen = UNDOSTORAGE.unshift(CURRENT); // adds current to UNDOSTORAGE
-		if (undoLen > 10) {
+		if (undoLen > 20) {
 			UNDOSTORAGE.pop();
 		}
 		CURRENT = next; // replaces current with the history stored in REDOSTORAGE
@@ -482,13 +484,13 @@ function Pencil() {
 	this.mousedown = function(e) {
 		TEMPCONTEXT.beginPath(); 
 		TEMPCONTEXT.moveTo(e.canvasX, e.canvasY); // sets start point
+        TEMPCONTEXT.strokeStyle = COLOR; // sets color
+        TEMPCONTEXT.lineWidth = LINEWIDTH; // sets width
 		tool.started = true; 
 	}
 	this.mousemove = function(e) {
 		if (tool.started) {
 			TEMPCONTEXT.lineTo(e.canvasX, e.canvasY); // determine line end point
-			TEMPCONTEXT.strokeStyle = COLOR; // sets color
-			TEMPCONTEXT.lineWidth = LINEWIDTH; // sets width
 			TEMPCONTEXT.stroke(); // draws the line in
 		}
 	}
@@ -508,8 +510,6 @@ function Rect() {
 
 	// chooses color then strokes rectangles into TEMPCONTEXT
 	this.toolFunc = function(x, y, w, h) {
-		TEMPCONTEXT.strokeStyle = COLOR;
-		TEMPCONTEXT.lineWidth = LINEWIDTH;
 		TEMPCONTEXT.strokeRect(x, y, w, h);
 		TEMPCONTEXT.strokeRect(x, y, w, h);
 		TEMPCONTEXT.strokeRect(x, y, w, h);
@@ -520,6 +520,8 @@ function Rect() {
 	this.mousedown = function(e) {
 		tool.startX = e.canvasX;
 		tool.startY = e.canvasY;
+		TEMPCONTEXT.strokeStyle = COLOR;
+		TEMPCONTEXT.lineWidth = LINEWIDTH;
 		tool.started = true;
 	}
 
@@ -547,7 +549,8 @@ function ClearRect() {
 
 	// clears a rectangle with top left corner at (x, y), width of w, height of h
 	this.toolFunc = function(x, y, w, h) {
-		TEMPCONTEXT.clearRect(x, y, w, h)
+        
+        TEMPCONTEXT.clearRect(x, y, w, h)
 	}
 
 	this.mousedown = function(e) {
@@ -587,8 +590,6 @@ function Line() {
 		TEMPCONTEXT.beginPath();
 		TEMPCONTEXT.moveTo(tool.startX, tool.startY);
 		TEMPCONTEXT.lineTo(endx, endy);
-		TEMPCONTEXT.strokeStyle = COLOR; // sets color
-		TEMPCONTEXT.lineWidth = LINEWIDTH;
 		TEMPCONTEXT.stroke(); // repeated for more bold
 		TEMPCONTEXT.stroke();
 		TEMPCONTEXT.stroke();
@@ -598,6 +599,8 @@ function Line() {
 	this.mousedown = function(e) {
 		tool.startX = e.canvasX;
 		tool.startY = e.canvasY;
+		TEMPCONTEXT.strokeStyle = COLOR; // sets color
+		TEMPCONTEXT.lineWidth = LINEWIDTH;
 		tool.started = true;
 	}
 	this.mousemove = function(e) {
@@ -644,8 +647,6 @@ function DashedLine() {
 			TEMPCONTEXT.lineTo(tool.startX + (i + fracLine) * dx, tool.startY + (i + fracLine) * dy);
 		}
 
-		TEMPCONTEXT.strokeStyle = COLOR; // sets color
-		TEMPCONTEXT.lineWidth = LINEWIDTH; // sets width
 		TEMPCONTEXT.stroke(); // repeated for more bold
 		TEMPCONTEXT.stroke();
 		TEMPCONTEXT.stroke();
@@ -684,8 +685,6 @@ function Arrow() {
 		TEMPCONTEXT.moveTo(endx, endy);
 		TEMPCONTEXT.lineTo(endx - arrowLen * Math.cos(arrowAng2), endy - arrowLen * Math.sin(arrowAng2));
 
-		TEMPCONTEXT.strokeStyle = COLOR; // sets color
-		TEMPCONTEXT.lineWidth = LINEWIDTH; // sets width
 		TEMPCONTEXT.stroke(); // repeated for more bold
 		TEMPCONTEXT.stroke();
 		TEMPCONTEXT.stroke();
@@ -787,11 +786,7 @@ function Arc() {
 		tool.secondAngle = angle(tool.centerX, tool.centerY, endx, endy); // calculates the end angle
 
 		// if second point radius bigger, go ccw around the circle
-		if (radius > tool.radius) {
-			tool.direction = true;
-		} else {
-			tool.direction = false;
-		}
+		tool.direction = (radius > tool.radius);
 
 		// if second angle is closer than 0.1 radians to first angle, default to full circle
 		if (diff(tool.secondAngle, tool.firstAngle) < 0.1 || diff(tool.secondAngle, tool.firstAngle) > Math.PI * 2 - 0.1) {
@@ -799,13 +794,10 @@ function Arc() {
 		}
 
 		// calculates the displayed angle difference from first to second point
-		if (tool.firstAngle > tool.secondAngle) {
-			angleDiff = Math.round(100 * (tool.secondAngle + 2 * Math.PI - tool.firstAngle) * 180 / Math.PI) / 100;
-		} else {
-			angleDiff = Math.round(100 * (tool.secondAngle - tool.firstAngle) * 180 / Math.PI) / 100;
-		}
-		// if counterclockwise trace, subtract angle from 360 degrees
-		if (tool.direction === true) {
+		angleDiff = Math.round(100 * (tool.secondAngle + ((tool.firstAngle > tool.secondAngle) ? 2 * Math.PI : 0) - tool.firstAngle) * 180 / Math.PI) / 100;
+		
+        // if counterclockwise trace, subtract angle from 360 degrees
+		if (tool.direction) {
 			angleDiff = Math.round(100 * (360 - angleDiff)) / 100;
 			if (angleDiff === 0) {
 				angleDiff = 360; // if angle at 360 degrees, keep it at 360 degrees
@@ -815,8 +807,6 @@ function Arc() {
 
 		// draws in arc
 		TEMPCONTEXT.beginPath();
-		TEMPCONTEXT.strokeStyle = COLOR; // sets color
-		TEMPCONTEXT.lineWidth = LINEWIDTH;
 		//Specifies the center, radius, start angle (angle in radians), end angle, false= clockwise
 		TEMPCONTEXT.arc(tool.centerX, tool.centerY, tool.radius, tool.firstAngle, tool.secondAngle, tool.direction);
 		TEMPCONTEXT.stroke();
@@ -825,7 +815,7 @@ function Arc() {
 	}
 	// sets centerXY to where mouse clicks down
 	this.mousedown = function(e) {
-		if (tool.center === false) { // before the center is set
+		if (!tool.center) { // before the center is set
 			tool.centerX = e.canvasX;
 			tool.centerY = e.canvasY;
 
@@ -838,6 +828,9 @@ function Arc() {
 			TEMPCONTEXT.moveTo(tool.centerX, tool.centerY + 4);
 			TEMPCONTEXT.lineTo(tool.centerX, tool.centerY - 4);
 			TEMPCONTEXT.stroke();
+            
+            TEMPCONTEXT.strokeStyle = COLOR; // sets color
+            TEMPCONTEXT.lineWidth = LINEWIDTH;
 
 			tool.center = true; // center has been set
 		} else { // after center is set, choose first point of arc
@@ -855,10 +848,10 @@ function Arc() {
 			TEMPCONTEXT.clearRect(0, 0, TEMPCANVAS.width, TEMPCANVAS.height);
 			TEMPCONTEXT.drawImage(CANVAS, 0, 0);
 			tool.toolFunc(e.canvasX, e.canvasY); // draws arc from start to current location
-		} else if (tool.center === false) { // set hint to 'choose center' if center has not been chosen
+		} else if (!tool.center) { // set hint to 'choose center' if center has not been chosen
 			HINT.innerHTML = 'choose center';
 		} else { // set hint to 'choose start point' if center set but radius not set
-			HINT.innerHTML = 'choose start point';
+			HINT.innerHTML = 'click arc start point then hold/drag';
 		}
 	}
 	this.mouseup = function(e) {
@@ -885,28 +878,33 @@ function canvasEvent(e) {
 	var action = TOOL[e.type];
 
 	// touchscreen interface
-	if (e.type == 'touchend') {
-		e.canvasX = e.changedTouches[0].pageX; // gets touch coordinates
-		e.canvasY = e.changedTouches[0].pageY;
-		incrementEdit = true; // increment EDITCOUNT only on touchend and mouseup
-		action = TOOL['mouseup'];
-	} else if (e.type == 'touchstart') {
-		e.canvasX = e.touches[0].pageX;
-		e.canvasY = e.touches[0].pageY;
-		action = TOOL['mousedown'];
-	} else if (e.type == 'touchmove') {
-		e.canvasX = e.touches[0].pageX;
-		e.canvasY = e.touches[0].pageY;
-		action = TOOL['mousemove'];
-	} else if (e.type == 'mouseup') {
-		incrementEdit = true;
+    switch(e.type) {
+        case 'touchend':
+            e.canvasX = e.changedTouches[0].pageX; // gets touch coordinates
+            e.canvasY = e.changedTouches[0].pageY;
+            incrementEdit = true; // increment EDITCOUNT only on touchend and mouseup
+            action = TOOL['mouseup'];
+            break;
+        case 'touchstart':
+            e.canvasX = e.touches[0].pageX;
+            e.canvasY = e.touches[0].pageY;
+            action = TOOL['mousedown'];
+            break;
+        case 'touchmove':
+            e.canvasX = e.touches[0].pageX;
+            e.canvasY = e.touches[0].pageY;
+            action = TOOL['mousemove'];
+            break;
+        case 'mouseup':
+            incrementEdit = true;
+            break;
 	}
 
 	//Checks that the function exists and chooses the function to use
 	//based on the type of the event
 	if (action) {
 		action(e);
-		if (incrementEdit == true) {
+		if (incrementEdit) {
 			handleEdits();
 		}
 	}
