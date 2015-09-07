@@ -1,0 +1,51 @@
+body {
+    padding: 0;
+    margin: 0;
+    font-family: Helvetica;
+    font-size: 12px;
+}
+
+#main {
+    margin-left: 70px;
+    height: 100%;
+    overflow: hidden;
+}
+
+#navbar {
+    position: fixed;
+    left: -150px;
+    width: 200px;
+    height: 100%;
+    z-index: 10;
+    text-align: center;
+    background-color: rgba(1, 1, 1, 0.7);
+    -webkit-box-shadow: 0px 0px 8px 0px #000000;
+    -moz-box-shadow: 0px 0px 8px 0px #000000;
+    transition: left 0.5s;
+}
+
+#navbar:hover {
+    left: 0px;
+}
+
+.navbar-item {
+    max-width: 100%;
+    float: right;
+}
+
+.navbar-item:hover {
+    background-color: rgba(0, 0, 0, 0.8);
+}
+
+.text {
+    font-size: 2em;
+    line-height: 1.5;
+}
+
+a > div > img {
+    width: 100%;
+    margin-right: 50px;
+    float: right;
+    opacity: 0.7;
+}
+

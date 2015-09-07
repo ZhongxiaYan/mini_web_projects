@@ -1,0 +1,64 @@
+<html>
+    <head>
+        <style type="text/css">
+            li div img {
+                height: 100%;
+            }
+
+            #slider {
+                list-style-type: none;
+                -webkit-transition: 0.5s left;
+                -moz-transition: 0.5s left;
+                -ms-transition: 0.5s left;
+                -o-transition: 0.5s left;
+                white-space: nowrap;
+                overflow: hidden;
+            }
+
+            #slider > ul {
+                position: relative;
+                left: 0px;
+                width: 2700px;
+                height: 100%;
+                z-index: 1;
+                overflow: hidden;
+                padding: 0px;
+                margin: 0px;
+            }
+
+            .slider-item {
+                display: inline-block;
+                height: 100%;
+                overflow: hidden;
+            }
+        </style>
+    </head>
+    <body>
+        <div id="main">
+            <div id="slider">
+                <ul>
+                    <li class="slider-item">
+                        <div>
+                            <img src="images/pic1.png">
+                        </div>
+                    </li>
+                    <li class="slider-item">
+                        <div>
+                            <img src="images/pic2.png">
+                        </div>
+                    </li>
+                    <li class="slider-item">
+                        <div>
+                            <img src="images/pic2.png">
+                        </div>
+                    </li>
+                    <li class="slider-item">
+                        <div>
+                            <img src="images/pic2.png">
+                        </div>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </body>
+</html>
