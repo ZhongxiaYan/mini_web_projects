@@ -5,30 +5,25 @@
         <link rel="stylesheet" type="text/css" href="css/common.css">
         <style type="text/css">
             #about {
-                position: fixed;
-                width: 700px;
+                float: left;
+                width: 400px;
             }
 
             #description {
-                font-size: 3em;
+                font-size: 2em;
             }
 
             #main {
-                margin-left: 220px;
+                margin-left: 420px;
             }
 
             #navbar {
                 left: 0px;
             }
 
-            #name {
-                font-size: 12em;
-                line-height: 1.3;
-            }
-
             #profile-pic {
-                width: 900px;
-                margin-left: 750px;
+                width: 400px;
+                margin-left: 420px;
             }
 
             #profile-pic > img {
@@ -36,8 +31,9 @@
             }
 
             #main-title {
-                height: 300px;
+                height: 180px;
                 margin-bottom: 20px;
+                width: 820px;
                 overflow: hidden;
             }
         </style>
@@ -46,7 +42,6 @@
         <div id="navbar">
             <a href="index.html">
                 <div class="navbar-item">
-                    <img src="images/pic1.png">
                     <p>Home</p>
                 </div>
             </a>
@@ -56,16 +51,28 @@
                     <p>Projects</p>
                 </div>
             </a>
-            <a href="contact.html">
+            <div class="navbar-item">
+                <p>More info:</p>
+            </div>
+            <a href="https://github.com/ZhongxiaYan">
                 <div class="navbar-item">
-                    <img src="images/pic1.png">
-                    <p>Contact</p>
+                    <p>Github</p>
+                </div>
+            </a>
+            <a href="https://www.linkedin.com/in/zhongxiayan">
+                <div class="navbar-item">
+                    <p>LinkedIn</p>
+                </div>
+            </a>
+            <a href="resume.pdf">
+                <div class="navbar-item">
+                    <p>Resume</p>
                 </div>
             </a>
         </div>
         <div id="main">
             <div id="main-title">
-                <div id="name">Zhongxia "Zee" Yan</div>
+                <div class="main-title-text">Zhongxia "Zee" Yan</div>
                 <div id="description">UC Berkeley Electrical Engineering and Computer Science, 2018</div>
             </div>
             <div id="main-body">
@@ -74,7 +81,7 @@
                     I have experience in web app development, android development, scripting, and well as integrated circuits design.
                 </div>
                 <div id="profile-pic">
-                    <img src="images/profile.jpg">
+                    <img src="images/index/profile.jpg">
                 </div>
             </div>
         </div>
