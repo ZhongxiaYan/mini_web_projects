@@ -1,7 +1,6 @@
 <html>
     <head>
         <style type="text/css">
-
             img {
                 width: 100%;
             }
@@ -14,6 +13,7 @@
                 width: 1000px;
                 height: 100px;
                 margin-bottom: 20px;
+                font-weight: 700;
                 overflow: hidden;
             }
 
@@ -49,6 +49,19 @@
                 margin-bottom: 20px;
             }
 
+            #slider-play {
+                width: 0px; 
+                height: 0px;
+                display: inline-block;
+                border-top: 8px solid transparent;
+                border-bottom: 8px solid transparent;
+                border-left: 8px solid #4679BD;
+            }
+
+            #slider-play:hover {
+                border-left-color: DarkRed;
+            }
+
             #wiced-image-frame > div {
                 float: left;
                 width: 212px;
@@ -82,6 +95,7 @@
                 border-radius: 50%;
                 background: #4679BD;
                 box-shadow: 0 0 3px gray;
+                float: left;
             }
 
             .slider-button:hover {
@@ -92,6 +106,7 @@
                 padding: 0px;
                 margin: 0px;
                 display: inline-block;
+                overflow: hidden;
             }
 
             .text-frame {
@@ -106,7 +121,9 @@
                 Projects
             </div>
             <div id="slider">
-                <div id="slider-button-bar"></div>
+                <div id="slider-button-bar">
+                    <div id="slider-play"></div>
+                </div>
                 <ul>
                     <li class="slider-page">
                         <div class="project-container">
@@ -121,7 +138,7 @@
                                     <div>
                                         <img src="images/project/wiced_comp.png">
                                     </div>
-                                </div>                               
+                                </div>
                             </div>
                             <div class="text-frame">
                                 <div class="title">WICED Mouse</div>

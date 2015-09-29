@@ -1,49 +1,49 @@
 use strict;
 use Data::Dumper;
+use File::Monitor;
 
-my @paired_tags_array = ("html", "head", "body", "script", "div", "a", "p", "style", "ul", "li");
-my @unpaired_tags_array = ("img", "link");
-
-my %paired_tags = ();
-my %unpaired_tags = ();
-foreach my $tag (@paired_tags_array) {
-    $paired_tags{$tag} = 1;
-    $unpaired_tags{$tag} = 1;
+my @common_files = @ARGV;
+foreach my $file (@common_files) {
+    integrate($file);
 }
 
-my @target_files = ();
-my %structure = ();
-if (open my $cfh, "common.html") {
-    my $targets = <$cfh>;
-    chomp $targets;
-    push @target_files, split(",", $targets);
-    while (<$cfh>) {
-        chomp;
-        if (m/^<html>/) {
-            read_tag($cfh, $_, \%structure);
+sub integrate {
+    my $file = shift;
+    my @target_files = ();
+    my %structure = ();
+    if (open my $cfh, $file) {
+        my $targets = <$cfh>;
+        chomp $targets;
+        push @target_files, split(",", $targets);
+        while (<$cfh>) {
+            chomp;
+            if (m/^<html>/) {
+                read_tag($cfh, $_, \%structure);
+            }
         }
+        close $cfh;
+    } else {
+        die "Cannot open common.html\n";
     }
-    close $cfh;
-} else {
-    die "Cannot open common.html\n";
-}
-print "Target files: ".join(", ", @target_files)."\n";
+    print "Target files: ".join(", ", @target_files)."\n";
 
-foreach my $target_file (@target_files) {
-    if (open my $fh, $target_file) {
-        if (open my $wh, ">", "../$target_file") {
-            while (<$fh>) {
-                chomp;
-                if (m/^<html>/) {
-                    scan_tag($fh, $wh, $_, \%structure);
+    foreach my $target_file (@target_files) {
+        if (open my $fh, $target_file) {
+            if (open my $wh, ">", "../$target_file") {
+                while (<$fh>) {
+                    chomp;
+                    if (m/^<html>/) {
+                        scan_tag($fh, $wh, $_, \%structure);
+                    }
                 }
+            } else {
+                die "Cannot open ../$target_file for write\n";
             }
         } else {
-            die "Cannot open ../$target_file for write\n";
+            die "Cannot open $target_file\n";
         }
-    } else {
-        die "Cannot open $target_file\n";
     }
+
 }
 
 sub scan_tag {

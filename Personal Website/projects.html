@@ -4,7 +4,6 @@
         <script type="text/javascript" src="js/script.js"></script>
         <link rel="stylesheet" type="text/css" href="css/common.css">
         <style type="text/css">
-
             img {
                 width: 100%;
             }
@@ -17,6 +16,7 @@
                 width: 1000px;
                 height: 100px;
                 margin-bottom: 20px;
+                font-weight: 700;
                 overflow: hidden;
             }
 
@@ -50,6 +50,21 @@
 
             #slider-button-bar {
                 margin-bottom: 20px;
+                padding-bottom: 4px;
+                border-bottom: 2px solid black;
+            }
+
+            #slider-play {
+                width: 0px; 
+                height: 0px;
+                display: inline-block;
+                border-top: 8px solid transparent;
+                border-bottom: 8px solid transparent;
+                border-left: 8px solid #4679BD;
+            }
+
+            #slider-play:hover {
+                border-left-color: DarkRed;
             }
 
             #wiced-image-frame > div {
@@ -85,6 +100,7 @@
                 border-radius: 50%;
                 background: #4679BD;
                 box-shadow: 0 0 3px gray;
+                float: left;
             }
 
             .slider-button:hover {
@@ -95,6 +111,7 @@
                 padding: 0px;
                 margin: 0px;
                 display: inline-block;
+                overflow: hidden;
             }
 
             .text-frame {
@@ -105,42 +122,58 @@
     </head>
     <body>
         <div id="navbar">
-            <a href="index.html">
-                <div class="navbar-item">
-                    <p>Home</p>
-                </div>
-            </a>
-            <a href="projects.html">
-                <div class="navbar-item">
-                    <img src="images/pic1.png">
-                    <p>Projects</p>
-                </div>
-            </a>
             <div class="navbar-item">
-                <p>More info:</p>
+                <img src="images/puzzle.png" class="navbar-tile">
             </div>
-            <a href="https://github.com/ZhongxiaYan">
-                <div class="navbar-item">
-                    <p>Github</p>
+            <div class="navbar-item">
+                <a href="index.html"><div class="navbar-text title" class="title">Home</div></a>
+                <map name="index-puzzle">
+                    <area shape="polygon" coords="172,0,173,15,178,29,177,44,169,56,153,65,131,63,120,55,113,41,112,27,115,19,119,14,119,0">
+                    <area shape="polygon" coords="5,4,5,191,123,191,124,206,117,220,117,230,122,242,136,252,155,252,169,240,173,229,172,218,169,208,166,206,167,191,298,191,298,4,172,4,173,15,178,29,177,44,169,56,153,65,131,63,120,55,113,41,112,27,115,19,119,14,119,4" href="index.html">
+                </map>
+                <img src="images/puzzle.png" class="navbar-tile" usemap="#index-puzzle">
+            </div>
+            <div class="navbar-item">
+                <map name="projects-puzzle">
+                    <area shape="polygon" coords="172,0,173,15,178,29,177,44,169,56,153,65,131,63,120,55,113,41,112,27,115,19,119,14,119,0">
+                    <area shape="polygon" coords="5,4,5,191,123,191,124,206,117,220,117,230,122,242,136,252,155,252,169,240,173,229,172,218,169,208,166,206,167,191,298,191,298,4,172,4,173,15,178,29,177,44,169,56,153,65,131,63,120,55,113,41,112,27,115,19,119,14,119,4" href="projects.html">
+                </map>
+                <a href="projects.html"><div class="navbar-text title" class="title">Projects</div></a>
+                <img src="images/puzzle.png" class="navbar-tile" usemap="#projects-puzzle">
+            </div>
+            <div class="navbar-item">
+                <div class="navbar-text text">
+                    More info:<br>
+                    <a href="https://github.com/ZhongxiaYan">Github</a>
+                    <a href="https://www.linkedin.com/in/zhongxiayan">LinkedIn</a>
+                    <a href="resume.pdf">Resume</a>
                 </div>
-            </a>
-            <a href="https://www.linkedin.com/in/zhongxiayan">
-                <div class="navbar-item">
-                    <p>LinkedIn</p>
-                </div>
-            </a>
-            <a href="resume.pdf">
-                <div class="navbar-item">
-                    <p>Resume</p>
-                </div>
-            </a>
+                <map name="more-info-puzzle">
+                    <area shape="polygon" coords="172,0,173,15,178,29,177,44,169,56,153,65,131,63,120,55,113,41,112,27,115,19,119,14,119,0">
+                    <area shape="polygon" coords="5,4,5,191,123,191,124,206,117,220,117,230,122,242,136,252,155,252,169,240,173,229,172,218,169,208,166,206,167,191,298,191,298,4,172,4,173,15,178,29,177,44,169,56,153,65,131,63,120,55,113,41,112,27,115,19,119,14,119,4">
+                </map>
+                <img src="images/puzzle.png" class="navbar-tile" usemap="#more-info-puzzle">
+            </div>
+            <div class="navbar-item">
+                <img src="images/puzzle.png" class="navbar-tile">
+            </div>
+            <div class="navbar-item">
+                <img src="images/puzzle.png" class="navbar-tile">
+            </div>
+            <div class="navbar-item">
+                <img src="images/puzzle.png" class="navbar-tile">
+            </div>
         </div>
         <div id="main">
             <div id="main-title" class="main-title-text">
                 Projects
             </div>
             <div id="slider">
-                <div id="slider-button-bar"></div>
+                <div id="slider-button-bar">
+                    <div>Hello</div>
+                    <div>Hi</div>
+                    <div id="slider-play"></div>
+                </div>
                 <ul>
                     <li class="slider-page">
                         <div class="project-container">
@@ -155,7 +188,7 @@
                                     <div>
                                         <img src="images/project/wiced_comp.png">
                                     </div>
-                                </div>                               
+                                </div>
                             </div>
                             <div class="text-frame">
                                 <div class="title">WICED Mouse</div>
