@@ -36,7 +36,33 @@
                 overflow: hidden;
             }
 
-            #slider > ul {
+            #slider-button-bar {
+                margin-bottom: 20px;
+                padding-bottom: 3.4px;
+                border-bottom: 2px solid black;
+                width: 1000px;
+                list-style-type: none;
+                list-style-position: inside;
+            }
+
+            #slider-button-bar > li {
+                display: inline;
+                padding-bottom: 3.5px;
+                font-size: 2em;
+                border: 2px solid black;
+                border-radius: 3px;
+                background-color: lightgrey;
+                overflow: hidden;
+                margin-right: 10px;
+                cursor: pointer;
+            }
+
+            #slider-button-bar > li:hover {
+                background-color: grey;
+                color: gold;
+            }
+
+            #slider-main {
                 position: relative;
                 left: 0px;
                 width: 0px;
@@ -46,25 +72,6 @@
                 padding: 0px;
                 margin: 0px;
                 transition: left 1s;
-            }
-
-            #slider-button-bar {
-                margin-bottom: 20px;
-                padding-bottom: 4px;
-                border-bottom: 2px solid black;
-            }
-
-            #slider-play {
-                width: 0px; 
-                height: 0px;
-                display: inline-block;
-                border-top: 8px solid transparent;
-                border-bottom: 8px solid transparent;
-                border-left: 8px solid #4679BD;
-            }
-
-            #slider-play:hover {
-                border-left-color: DarkRed;
             }
 
             #wiced-image-frame > div {
@@ -114,9 +121,18 @@
                 overflow: hidden;
             }
 
+            .slider-play-pause {
+                position: relative;
+                top: 8px;
+                display: inline;
+                height: 30px;
+                width: 30px;
+                cursor: pointer;
+            }
+
             .text-frame {
                 margin-left: 520px;
-                width: 480px;
+                width: 450px;
             }
         </style>
     </head>
@@ -169,12 +185,10 @@
                 Projects
             </div>
             <div id="slider">
-                <div id="slider-button-bar">
-                    <div>Hello</div>
-                    <div>Hi</div>
-                    <div id="slider-play"></div>
-                </div>
-                <ul>
+                <ul id="slider-button-bar">
+                    <img class="slider-play-pause" src="images/project/pause.png"></div>
+                </ul>
+                <ul id="slider-main">
                     <li class="slider-page">
                         <div class="project-container">
                             <div id="wiced-image-frame" class="image-frame">
@@ -193,11 +207,7 @@
                             <div class="text-frame">
                                 <div class="title">WICED Mouse</div>
                                 <div class="text">
-                                    I built paint as a Chrome Extension with some additional
-                                    useful features. These include an arc
-                                    tool, flood fill tool, typing Greek characters using LaTeX 
-                                    syntax, and upload or download images. The paint app also 
-                                    saves history and can redo and undo.
+                                    My partner and I utilized the sensors in the WICED Sense tag to create a hover mouse. I modified the existing Android app base to communicate with a Java computer app via UDP packets. A magnet is attached to the users thumb, and we interpreted tilt data for mouse movement and magnetometer data for clicks and scrolls. 
                                 </div>
                             </div>
                         </div>
@@ -208,13 +218,9 @@
                                 <img src="images/project/calsol_telemetry_grapher.jpg">
                             </div>
                             <div class="text-frame">
-                                <div class="title">Paint Chrome Extension</div>
+                                <div class="title">Telemetry Grapher</div>
                                 <div class="text">
-                                    I built paint as a Chrome Extension with some additional
-                                    useful features. These include an arc
-                                    tool, flood fill tool, typing Greek characters using LaTeX 
-                                    syntax, and upload or download images. The paint app also 
-                                    saves history and can redo and undo.
+                                    Using JFreeChart, I created a real time graphical interface for the Cal Solar Vehicle team's telemetry program. The program plotted received power and speed, and displayed voltages and temperatures in tables. The GUI can also take existing log datas and simulate the car's messages by timestamps recorded by the log.
                                 </div>
                             </div>
                         </div>
@@ -225,13 +231,9 @@
                                 <img src="images/project/paint1.jpg">
                             </div>
                             <div class="text-frame">
-                                <div class="title">Paint Chrome Extension</div>
+                                <div class="title">Paint</div>
                                 <div class="text">
-                                    I built paint as a Chrome Extension with some additional
-                                    useful features. These include an arc
-                                    tool, flood fill tool, typing Greek characters using LaTeX 
-                                    syntax, and upload or download images. The paint app also 
-                                    saves history and can redo and undo.
+                                    Created Paint as a Chrome Extension with some customized useful features, such as a flexible arc tool, typing Greek characters using LaTeX syntax. In addition, basic features like flood fill, rectangle, redo and undo, and upload or download image are also available.
                                 </div>
                             </div>
                         </div>
@@ -243,13 +245,9 @@
                                 <img src="images/project/dashboard_layout.jpg">
                             </div>
                             <div class="text-frame">
-                                <div class="title">Paint Chrome Extension</div>
+                                <div class="title">Dashboard Design</div>
                                 <div class="text">
-                                    I built paint as a Chrome Extension with some additional
-                                    useful features. These include an arc
-                                    tool, flood fill tool, typing Greek characters using LaTeX 
-                                    syntax, and upload or download images. The paint app also 
-                                    saves history and can redo and undo.
+                                    I redesigned the Dashboard circuit board schematics and layout for Cal Solar Vehicle Team, basing some of the designs on a previous revision. The board communicates with an array of I2C and SPI devices, including the accelerator and brake pedal, 7-segment LED display, and various switches and LED drivers. 
                                 </div>
                             </div>
                         </div>

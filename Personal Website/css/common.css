@@ -16,8 +16,9 @@ map > area:active, map > area:focus {
 
 #main {
     margin-left: 70px;
-    width: 1000px;
+    width: 100%;
     height: 100%;
+    overflow-x: hidden;
 }
 
 #navbar {

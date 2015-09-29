@@ -7,7 +7,7 @@ $(document).ready(function() {
         $("#navbar").removeAttr("style");
     }, 1000);
 
-    var slider = new Slider($("#slider ul"), $("#slider-button-bar"), 7000);
+    var slider = new Slider($("#slider-main"), $("#slider-button-bar"), "images/project/play.png", "images/project/pause.png", 7000);
     $(".navbar-item").each(function(index) {
         if ($(this).has("map").length) {
             var map = new Map($(this).children("map"), $(this).children(".navbar-tile"));
@@ -27,16 +27,19 @@ function choose_index_num() {
     }
 }
 
-var Slider = function(slider_ul, slider_button_bar, time_ms) {
+var Slider = function(slider_ul, slider_button_bar, pause_img, play_img, time_ms) {
     var self = this;
 
     this.panel = slider_ul;
     this.button_bar = slider_button_bar;
+    this.pause_img = pause_img;
+    this.play_img = play_img;
     this.time = time_ms;
 
     this.page_width = this.panel.parent().width();
     this.panel.parent().width(this.page_width);
-    this.panel.children().width(this.page_width);
+    this.pages = this.panel.children();
+    this.pages.width(this.page_width);
 
     this.total_pages = this.panel.children().length;
     this.panel.width(this.page_width * (this.total_pages + 1));
@@ -45,32 +48,40 @@ var Slider = function(slider_ul, slider_button_bar, time_ms) {
     this.started = false;
 
     {
-        for (var i = 0; i < self.total_pages; i++) {
-            self.button_bar.prepend("<button class=\"slider-button\"></button>");
+        for (var i = self.total_pages - 1; i >= 0; i--) {
+            var title = self.pages.eq(i).find(".title").html();
+            self.button_bar.prepend("<li>" + title + "</li>");
         }
-        self.button_bar.children().on("click", function() {
-            self.button_bar.children().css("background-color", "");
-            self.button_bar.children().css("border-left-color", "");
-            // the play button
-            if ($(this).index() == self.total_pages) {
-                self.start_slider_loop();
-                $(this).css("border-left-color", "green");
-            } else {
-                self.go_to($(this).index());
-                $(this).css("background-color", "yellow");
+        self.buttons = self.button_bar.children("li");
+        self.buttons.on("click", function() {
+            self.go_to($(this).index());
+            self.stop_slider_loop();
+        });
+        self.button_bar.children(".slider-play-pause").on("click", function() {
+            if (self.started) {
+                $(this).attr("src", self.pause_img);
                 self.stop_slider_loop();
+            } else {
+                $(this).attr("src", self.play_img);
+                self.start_slider_loop();
             }
         });
     }
-
+    this.go_to(this.index);
     this.start_slider_loop();
-    this.started = true;
 };
 
 
 Slider.prototype.go_to = function(index) {
     this.index = index;
     this.panel.css("left", -index * this.page_width + "px");
+    this.buttons.removeAttr("style");
+    this.buttons.eq(index).css(
+        {
+            "background-color": "white",
+            "border-bottom": "4px solid white"
+        }
+    );
 };
 
 Slider.prototype.next_page = function() {
@@ -80,6 +91,7 @@ Slider.prototype.next_page = function() {
 Slider.prototype.start_slider_loop = function() {
     if (!this.started) {
         this.interval_id = window.setInterval(this.next_page.bind(this), this.time);
+        this.started = true;
     }
 };
 
@@ -106,11 +118,9 @@ var Navbar = function(navbar, separation, page_index) {
         
     navbar_items.each(function() {
         if (prev_link) {
-            console.log("found" + prev_link);
             $(this).find("map").children().eq(0).attr("href", prev_link);
         }
         prev_link = $(this).find("map").children().eq(1).attr("href");
-        console.log(prev_link);
     });
 }
 
